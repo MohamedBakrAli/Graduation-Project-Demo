@@ -21,22 +21,26 @@ def demo ():
         
         return render_template("demo.html")
     elif request.method == 'POST':
-        target = os.path.join(APP_ROOT, 'models/input')
+        target = os.path.join(APP_ROOT, 'input')
         if not os.path.isdir(target):
             os.mkdir(target)
         
-        print(target)
-        print(request.files.getlist("inputImage"))
-        print("===========")
-        for file in request.files.getlist("inputImage"):
-            print(file)
-            filename = file.filename
-            destination = "/".join([target, filename])
-            print(destination)
-            file.save(destination)
-            print("test")
+        # save the input image
+        file = request.files.getlist("inputImage")[0]
+        filename = file.filename
+        destination = "/".join([target, filename])
+        file.save(destination)
+        
+       
+        print("# : " , request.values)
 
-        print("===========")
+        # run model Super resolution.
+        
+
+        # run models denoising if choice.
+
+
+
         return "complete"
 
 

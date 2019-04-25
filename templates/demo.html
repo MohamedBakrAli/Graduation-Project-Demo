@@ -14,18 +14,21 @@
 	
 	<div class="container">
 	  <div class="page-header">
-      <h1><center>Let's do it</center></h1>
+      <h1 ><center>Let's do it</center></h1>
     </div>
-    <form action="" method="post"> 
-      
+    <form action="" method="post" enctype="multipart/form-data" onsubmit="return validateForm();"> 
+        
         <label for="InputImage">Upload Image:</label>
-        <input type="file" id="InputImage" accept="image/*" name = "inputImage"> 
-        <p class="help-block">Example block-level help text here.</p>
-      
+        <input type="file" id="InputImage" accept="image/*" name = "inputImage"  onchange="readURL(this);">  
+        <div class="inputImage">
+          <img id="imag_1" src="#" class="img-thumbnail"/>
+        </div>
+        <p class="error" id ="msg">You Should Choice Image !! </p>
+
         <label >Super Resolution Sacle:</label>
         <br>
-        <input type="radio" id="customRadio1" name="scale" value="2x">
-        <label  for="customRadio1">2X</label>
+        <input type="radio" id="customRadio1" name="scale" value="2x" checked>
+        <label  for="customRadio1" >2X</label>
         <br>
         <input type="radio" id="customRadio2" name="scale" value="3x">
         <label  for="customRadio2">3X</label>
@@ -34,11 +37,11 @@
         <label  for="customRadio3">4X</label>
         <br>
         <input type="checkbox" id="Denoising" onclick="denoising_disply()" name="denoising">
-        <label  for="denoising">Denoising</label>
+        <label  for="Denoising">Denoising</label>
       
-      <div  id = "choice" >
-        <label >#smothing vector:</label>
-        <select name = "Vector">
+      <div  id = "choice">
+        <label >smoothing factor:</label>
+        <select name = "smoothingFactor">
           <option value="5" selected>5</option>
           <option value="10">10</option>
           <option value="15">15</option>
@@ -66,35 +69,33 @@
 
   </div>
 
-<br>
-<br>
-<br>
+  <br>
+  <br>
+  <br>
 
-<center><h1>Result</h1><center>
+  <center><h1>Result</h1><center>
 
-<div class="Super Resolution examples">
-<div class="row">
-    <div class="col-md-6">
-      <div class="thumbnail">
-          
-          <img src="{{url_for('static', filename='images/img123.jpg')}}" alt="Lights" style="width:100%">
-          <div class="caption">
-            <p><center>Before</center></p>
+  <div class="Super Resolution examples">
+      <div class="row">
+          <div class="col-md-6">
+            <div class="thumbnail">
+                
+                <img src="{{url_for('static', filename='images/img123.jpg')}}" alt="Lights" style="width:100%">
+                <div class="caption">
+                  <p><center>Before</center></p>
+                </div>
+            </div>
           </div>
+          <div class="col-md-6">
+            <div class="thumbnail">
+                <img src="{{url_for('static', filename='images/img123.jpg')}}" alt="Nature" style="width:100%">
+                <div class="caption">
+                  <p><center>After</center></p>
+                </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
-    <div class="col-md-6">
-      <div class="thumbnail">
-          <img src="{{url_for('static', filename='images/img123.jpg')}}" alt="Nature" style="width:100%">
-          <div class="caption">
-            <p><center>After</center></p>
-          </div>
-      </div>
-    </div>
-  </div>
-</div>
-
-
-  </div>
 	</body>
 </html>

@@ -1,12 +1,18 @@
 
 import os
-from flask import Flask, request, redirect, url_for, render_template
+import matplotlib.image as mpimg
+import cv2
+import matplotlib.pyplot as plt
 
+from FFDNET_test.test_ffdnet_ipol import test_ffdnet
+from flask import Flask, request, redirect, url_for, render_template
 
 APP_ROOT = os.path.dirname(os.path.abspath(__file__))
 
 app = Flask(__name__)
 
+# the system has GPU or not
+cuda = False
 
 
 @app.route('/project')
@@ -38,10 +44,12 @@ def demo ():
         
 
         # run models denoising if choice.
-
-
-
-        return "complete"
+        img=mpimg.imread(file)
+        outimg = test_ffdnet (img, cuda, 70)
+        
+        #plt.imshow(outimg)
+        #plt.show()
+        return outimg
 
 
 

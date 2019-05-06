@@ -6,21 +6,22 @@ import cv2
 import torch
 import torch.nn as nn
 from torch.autograd import Variable
-from models import FFDNet
-from utils import batch_psnr, normalize, init_logger_ipol, \
+from .models import FFDNet
+from .utils import batch_psnr, normalize, init_logger_ipol, \
 				variable_to_cv2_image, remove_dataparallel_wrapper, is_rgb
 
 os.environ["CUDA_DEVICE_ORDER"] = "PCI_BUS_ID"
 os.environ["CUDA_VISIBLE_DEVICES"] = "0"
 
 
-def test_ffdnet(input, cuda, noise_sigma):
+def test_ffdnet(input_path, out_path, cuda, noise_sigma):
 
         """Denoises an input image with FFDNet
         """
         # Normalize the nose sigma [0, 1] 
         noise_sigma /= 255.
         # Check if input exists and if it is RGB
+        input = cv2.imread(input_path)
         rgb_den = is_rgb(input)
         if rgb_den:
             in_ch = 3
@@ -97,10 +98,11 @@ def test_ffdnet(input, cuda, noise_sigma):
             outim = outim[:, :, :, :-1]
             imorig = imorig[:, :, :, :-1]
 
-
+        if os.path.exists(out_path):
+            os.remove(out_path)
         # Save output
         outimg = variable_to_cv2_image(outim)
-        return (outimg)
+        cv2.imwrite(out_path, outimg)
         
     
 if __name__ == "__main__":

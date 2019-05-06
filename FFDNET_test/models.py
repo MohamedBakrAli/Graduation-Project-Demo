@@ -12,7 +12,7 @@ this program. If not, see <http://www.gnu.org/licenses/>.
 """
 import torch.nn as nn
 from torch.autograd import Variable
-import functions
+from .functions import *
 from torch import no_grad
 class UpSampleFeatures(nn.Module):
 	r"""Implements the last layer of FFDNet
@@ -20,7 +20,7 @@ class UpSampleFeatures(nn.Module):
 	def __init__(self):
 		super(UpSampleFeatures, self).__init__()
 	def forward(self, x):
-		return functions.upsamplefeatures(x)
+		return upsamplefeatures(x)
 
 class IntermediateDnCNN(nn.Module):
 	r"""Implements the middel part of the FFDNet architecture, which
@@ -94,13 +94,14 @@ class FFDNet(nn.Module):
 		self.upsamplefeatures = UpSampleFeatures()
 
 	def forward(self, x, noise_sigma):
-		concat_noise_x = functions.concatenate_input_noise_map(\
+		concat_noise_x = concatenate_input_noise_map(\
 				x.data, noise_sigma.data)
 		if self.test_mode:
 			with no_grad():
 				concat_noise_x = Variable(concat_noise_x, volatile=True)
 		else:
-			concat_noise_x = Variable(concat_noise_x)
+			with no_grad():
+				concat_noise_x = Variable(concat_noise_x)
 		h_dncnn = self.intermediate_dncnn(concat_noise_x)
 		pred_noise = self.upsamplefeatures(h_dncnn)
 		return pred_noise

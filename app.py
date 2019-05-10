@@ -4,16 +4,18 @@ import torchvision.utils as utils
 from flask import Flask, request, redirect, url_for, render_template, send_file
 from FFDNET_test.test_ffdnet_ipol import test_ffdnet
 from PCARN_test.result import compute_image
-from apscheduler.scheduler import Scheduler
+#from apscheduler.scheduler import Scheduler
 
 APP_ROOT = os.path.dirname(os.path.abspath(__file__))
 
 app = Flask(__name__)
 
+
+"""
 cron = Scheduler(daemon=True)
 # Explicitly kick off the background thread
 cron.start()
-
+"""
 
 def remove(path):
     """
@@ -47,14 +49,14 @@ def cleanup(number_of_days, path):
  
        
  
-
+"""
 @cron.interval_schedule(hours = 4)
 def delete_temporary_files():
     input_path = os.path.join(APP_ROOT, 'static/input')
     output_path = os.path.join(APP_ROOT, 'static/output')
     cleanup(1, input_path)
     cleanup(1, output_path)
-
+"""
 
 
 # the system has GPU or not

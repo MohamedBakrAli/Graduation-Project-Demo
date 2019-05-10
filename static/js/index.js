@@ -17,19 +17,39 @@ function readURL(input) {
     }
 }
 /*
+    show the scale check boxes.
+*/
+function scal_disply() {
+    // Get the checkbox
+    var checkBox = document.getElementById("SuperResolution");
+
+    // If the checkbox is checked, display the scale check boxes
+    if (checkBox.checked == true){
+        $('.scale').each(function(){
+            $(this).prop('disabled', false);
+            })
+    } else {
+        $('.scale').each(function(){
+            $(this).prop('disabled', true);
+            })
+    }
+}
+
+
+/*
     show the drop down if user want to apply denoising.
 */
-function denoising_disply() {
+function smoothingFactor_disaply() {
     // Get the checkbox
     var checkBox = document.getElementById("Denoising");
-    // Get the output text
-    var choice = document.getElementById("choice");
-  
-    // If the checkbox is checked, display the output text
+
+    // If the checkbox is checked, display the scale check boxes
     if (checkBox.checked == true){
-        choice.style.display = "block";
+        $('.smoothingFactor').prop('disabled', false);
+            
     } else {
-        choice.style.display = "none";
+        $('.smoothingFactor').prop('disabled', true);
+
     }
 }
 
@@ -38,10 +58,24 @@ function denoising_disply() {
     check if the user choice an image or not.
 */
 function validateForm(){
+    flag = true;
     if(!document.getElementById('InputImage').value) {
-       document.getElementById('msg').style.display = "block";
-       return false;
+       document.getElementById('msg_1').style.display = "block";
+       flag =  false;
     }
+    else {
+        document.getElementById('msg_1').style.display = "none";
+    }
+    var checkBox1 = document.getElementById("Denoising");
+    var checkBox2 = document.getElementById("SuperResolution");
+    if ((checkBox1.checked == false) && (checkBox2.checked == false)) {
+        document.getElementById('msg_2').style.display = "block";
+        flag =  false;
+    }
+    else {
+        document.getElementById('msg_2').style.display = "none";
+    }
+    return flag;
 }
 
 

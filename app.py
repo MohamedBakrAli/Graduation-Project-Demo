@@ -1,7 +1,4 @@
-import os, time
-import matplotlib.image as mpimg
-import cv2
-import matplotlib.pyplot as plt
+import os, time, sys
 import torchvision.utils as utils
 
 from flask import Flask, request, redirect, url_for, render_template, send_file
@@ -18,23 +15,45 @@ cron = Scheduler(daemon=True)
 cron.start()
 
 
-def delete_files_every_x_days(path, days):
-    now = time.time()
-    for filename in os.listdir(path):
-        # if os.stat(os.path.join(path, filename)).st_mtime < now - 7 * 86400:
-        if os.path.getmtime(os.path.join(path, filename)) < now - 7 * 86400:
-            if os.path.isfile(os.path.join(path, filename)):
-                print(filename)
-                os.remove(os.path.join(path, filename))
-
-
+def remove(path):
+    """
+    Remove the file or directory
+    """
+    if os.path.isdir(path):
+        try:
+            os.rmdir(path)
+        except OSError:
+            print ("Unable to remove folder: %s" % path)
+    else:
+        try:
+            if os.path.exists(path):
+                os.remove(path)
+        except OSError:
+            print ("Unable to remove file: %s" % path)
+ 
+def cleanup(number_of_days, path):
+    """
+    Removes files from the passed in path that are older than or equal 
+    to the number_of_days
+    """
+    time_in_secs = time.time() - (number_of_days * 24 * 60 * 60)
+    for root, dirs, files in os.walk(path, topdown=False):
+        for file_ in files:
+            full_path = os.path.join(root, file_)
+            stat = os.stat(full_path)
+ 
+            if stat.st_mtime <= time_in_secs:
+                remove(full_path)
+ 
+       
+ 
 
 @cron.interval_schedule(hours = 4)
 def delete_temporary_files():
     input_path = os.path.join(APP_ROOT, 'static/input')
     output_path = os.path.join(APP_ROOT, 'static/output')
-    delete_files_every_x_days(input_path, 1)
-    delete_files_every_x_days(output_path, 1)
+    cleanup(1, input_path)
+    cleanup(1, output_path)
 
 
 
@@ -73,25 +92,21 @@ def result ():
     # save the input image
     file.save(input_path)
     
-    # get the paramters
-    scale = int(request.form['scale'])
-    #denoising_flag = request.form['denoising']
-    smoothing_factor = request.form['smoothingFactor']
-    
-
-    # read the input image
-    #img=cv2.imread(input_path)
-
     # run model Super resolution.
-    compute_image(input_path, scale, output_path)
+    if (request.form.get('superResolution')):
+        scale = int(request.form['scale'])
+        compute_image(input_path, scale, output_path)
 
     # run models denoising if choice.
-    if (request.form.get('denoising')) :
+    if (request.form.get('denoising') and request.form.get('superResolution')) :
+        smoothing_factor = request.form['smoothingFactor']
         test_ffdnet (output_path, output_path, cuda, int(smoothing_factor))
+    elif (request.form.get('denoising')):
+        smoothing_factor = request.form['smoothingFactor']
+        test_ffdnet (input_path, output_path, cuda, int(smoothing_factor))
 
     time.sleep(1)
     return render_template("result.html", input = "in_" + user_adr + filename, output = "out_"+ user_adr + filename)
-
 
 
 

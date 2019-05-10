@@ -23,25 +23,29 @@
         <div class="inputImage">
           <img id="imag_1" src="#" class="img-thumbnail"/>
         </div>
-        <p class="error" id ="msg">You Should Choice Image !! </p>
-
-        <label >Super Resolution Sacle:</label>
+        <p class="error" id ="msg_1">You Should Choice Image !! </p>
+       
+        <input type="checkbox" id="SuperResolution" onclick="scal_disply()" name="superResolution" checked>
+        <label  for="SuperResolution">Super Resolution:</label>
         <br>
-        <input type="radio" id="customRadio1" name="scale" value="2" checked>
+        <label >Sacle:</label>
+        <br>
+        <input class="scale" type="radio" id="customRadio1" name="scale" value="2" checked>
         <label  for="customRadio1" >2X</label>
         <br>
-        <input type="radio" id="customRadio2" name="scale" value="3">
+        <input class="scale" type="radio" id="customRadio2" name="scale" value="3">
         <label  for="customRadio2">3X</label>
         <br>
-        <input type="radio" id="customRadio3" name="scale" value="4">
+        <input class="scale" type="radio" id="customRadio3" name="scale" value="4">
         <label  for="customRadio3">4X</label>
         <br>
-        <input type="checkbox" id="Denoising" onclick="denoising_disply()" name="denoising">
-        <label  for="Denoising">Denoising</label>
-      
-      <div  id = "choice">
+       
+       
+        <input type="checkbox" id="Denoising"  name="denoising" onclick="smoothingFactor_disaply()">
+        <label  for="Denoising">Denoising:</label>
+        <br>
         <label >smoothing factor:</label>
-        <select name = "smoothingFactor">
+        <select class="smoothingFactor" name = "smoothingFactor" disabled >
           <option value="5" selected>5</option>
           <option value="10">10</option>
           <option value="15">15</option>
@@ -58,8 +62,7 @@
           <option value="70">70</option>
           <option value="75">75</option>
         </select>
-      </div>
-
+      <p class="error" id ="msg_2">You Should Select Super Resolution ,Denoising or both !! </p>
       <div class="button">
         <center><button type="submit" ><span>Run </span></button></center>
       </div>

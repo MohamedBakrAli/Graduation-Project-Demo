@@ -11,6 +11,11 @@ body {
   display: none;
   
 }
+.abstract p {
+  width: 70%;
+  margin: auto auto;
+  font-size: 1.2em;
+}
 select { 
   -webkit-border-radius:25px; 
   -moz-border-radius:25px; 

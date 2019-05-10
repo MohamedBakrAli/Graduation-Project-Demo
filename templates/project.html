@@ -3,13 +3,13 @@
   <head>
     <meta charset="utf-8"> 
     
-	<link rel='stylesheet' href="{{url_for('static', filename='css/bootstrap.css')}}"/>
-	<link rel='stylesheet' href="{{url_for('static', filename='css/style.css')}}"/>
+	<link rel='stylesheet' href="/static/css/bootstrap.css"/>
+	<link rel='stylesheet' href="/static/css/style.css"/>
   </head>
   <body>
       
-  	<script src="{{url_for('static', filename='js/jquery.js')}}"></script>
-	  <script src="{{url_for('static', filename='js/bootstrap.min.js')}}"></script>
+  	<script src="static/js/jquery.js"></script>
+	  <script src="static/js/bootstrap.min.js"></script>
   <div class="header">
   <h1>
   <span class="glyphicon glyphicon-camera" aria-hidden="true"></span><center>Image Upscaling and Denoising</center></h1>
@@ -30,7 +30,7 @@
     <div class="col-md-4">
       <div class="thumbnail">
           
-          <img src="{{url_for('static', filename='images/2x.jpg')}}" alt="Lights" style="width:100%">
+          <img src="/static/images/2x.jpg" alt="Lights" style="width:100%">
           <div class="caption">
             <p><center>2X Example</center></p>
           </div>
@@ -38,7 +38,7 @@
     </div>
     <div class="col-md-4">
       <div class="thumbnail">
-          <img src="{{url_for('static', filename='images/3x.jpg')}}" alt="Nature" style="width:100%">
+          <img src="/static/images/3x.jpg" alt="Nature" style="width:100%">
           <div class="caption">
             <p><center>3X Example</center></p>
           </div>
@@ -46,7 +46,7 @@
     </div>
     <div class="col-md-4">
       <div class="thumbnail">
-          <img src="{{url_for('static', filename='images/4x.jpg')}}" alt="Fjords" style="width:100%">
+          <img src="/static/images/4x.jpg" alt="Fjords" style="width:100%">
           <div class="caption">
             <p><center>4X Example</center></p>
           </div>
@@ -59,25 +59,25 @@
 <div class="row">
     <div class="col-md-4">
       <div class="thumbnail">
-          <img src="{{url_for('static', filename='images/2x.jpg')}}" alt="Lights" style="width:100%">
+          <img src="/static/images/denoising1.jpg" alt="Lights" style="width:100%">
           <div class="caption">
-            <p><center>2X Example</center></p>
+            <p><center>Denoising Example</center></p>
           </div>
       </div>
     </div>
     <div class="col-md-4">
       <div class="thumbnail">
-          <img src="/static/input/{{input}}" alt="Nature" style="width:100%">
+          <img src="/static/images/denoising2.jpg" alt="Nature" style="width:100%">
           <div class="caption">
-            <p><center>3X Example</center></p>
+            <p><center>Denoising Example</center></p>
           </div>
       </div>
     </div>
     <div class="col-md-4">
       <div class="thumbnail">
-          <img src="/static/input/{{input}}" alt="Fjords" style="width:100%">
+          <img src="/static/images/denoising3.jpg" alt="Fjords" style="width:100%">
           <div class="caption">
-            <p><center>4X Example</center></p>
+            <p><center>Denoising Example</center></p>
           </div>
       </div>
     </div>

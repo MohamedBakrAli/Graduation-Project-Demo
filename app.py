@@ -65,8 +65,6 @@ cuda = False
 def index ():
     return render_template("project.html")
 
-
-
 @app.route('/demo', methods=['GET'])
 def demo ():
     return render_template("demo.html")
@@ -98,14 +96,27 @@ def result ():
         compute_image(input_path, scale, output_path)
 
     # run models denoising if choice.
-    if (request.form.get('denoising') and request.form.get('superResolution')) :
+    if (request.form.get('denoising') and request.form.get('superResolution')):
         smoothing_factor = request.form['smoothingFactor']
-        test_ffdnet (output_path, output_path, cuda, int(smoothing_factor))
+
+        if (smoothing_factor == 'Auto'):
+            smoothing_factor = estimate_noise(output_path)
+        else:
+            smoothing_factor = int(smoothing_factor)
+
+        test_ffdnet (output_path, output_path, cuda, smoothing_factor)
+        
     elif (request.form.get('denoising')):
         smoothing_factor = request.form['smoothingFactor']
-        test_ffdnet (input_path, output_path, cuda, int(smoothing_factor))
 
-    time.sleep(1)
+        if (smoothing_factor == 'Auto'):
+            smoothing_factor = estimate_noise(input_path)
+        else:
+            smoothing_factor = int(smoothing_factor)
+
+        test_ffdnet (input_path, output_path, cuda, smoothing_factor)
+            
+
     return render_template("result.html", input = "in_" + user_adr + filename, output = "out_"+ user_adr + filename)
 
 

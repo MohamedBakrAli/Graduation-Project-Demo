@@ -13,6 +13,18 @@ from .utils import batch_psnr, normalize, init_logger_ipol, \
 os.environ["CUDA_DEVICE_ORDER"] = "PCI_BUS_ID"
 os.environ["CUDA_VISIBLE_DEVICES"] = "0"
 
+def estimate_noise(file):
+    
+    img = cv2.imread(file)
+    I = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+    H, W = I.shape
+    M = [[1, -2, 1],
+    [-2, 4, -2],
+    [1, -2, 1]]
+    sigma = np.sum(np.sum(np.absolute(convolve2d(I, M))))
+    sigma = sigma * math.sqrt(0.5 * math.pi) / (6 * (W-2) * (H-2))
+    return int(sigma)
+
 
 def test_ffdnet(input_path, out_path, cuda, noise_sigma):
 
@@ -106,6 +118,8 @@ def test_ffdnet(input_path, out_path, cuda, noise_sigma):
         
     
 if __name__ == "__main__":
-    imorig = cv2.imread('woman.png')
-    outimg = test_ffdnet (imorig, False, 70)
-    cv2.imwrite("ffdnet_out.png", outimg)
+   # imorig = cv2.imread()
+    noise_sigma = estimate_noise('/home/bakr/Desktop/woman.png')
+    noise_sigma += (0.2 * noise_sigma)
+    outimg = test_ffdnet ('/home/bakr/Desktop/woman.png','/home/bakr/Desktop/ffdnet_out.png', False, noise_sigma)
+   # cv2.imwrite("ffdnet_out.png", outimg)

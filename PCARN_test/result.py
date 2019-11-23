@@ -24,20 +24,18 @@ def compute_image(LR_path,scale, SR_path):
         ])
     lr = transform(lr)
     lr = lr.unsqueeze(0)
+
     kwargs = {
         "num_channels": 64,
         "groups": 1,
         "mobile": False,
         "scale": scale,
     }
-    net = Net(**kwargs).to("cpu")
-    state_dict = torch.load(ckpt_path, map_location=lambda storage, loc: storage)
-    new_state_dict = OrderedDict()
-    for k, v in state_dict.items():
-        name = k
-        # name = k[7:] # remove "module."
-        new_state_dict[name] = v
-    net.load_state_dict(new_state_dict)
+    device = torch.device("cpu")
+    lr = lr.to(device)
+    net = Net(**kwargs).to(device)
+    state_dict = torch.load(ckpt_path, map_location=device)
+    net.load_state_dict(state_dict)
     with torch.no_grad():
         SR = net(lr,scale).detach()
         
@@ -46,7 +44,7 @@ def compute_image(LR_path,scale, SR_path):
 
 def main():
 
-    compute_image("/home/bakr/Downloads/test_PCARN/low.jpg",2)
+    compute_image("/media/bakr/Local\ Disk/computer/4th\ Year/Graduation\ project/code/Web-APP/PCARN_test/1/png",2,"/media/bakr/Local\ Disk/computer/4th\ Year/Graduation\ project/code/Web-APP/PCARN_test/1_o.png")
 
     
 

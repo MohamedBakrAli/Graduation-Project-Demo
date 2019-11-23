@@ -4,6 +4,15 @@ import torch.nn as nn
 import torch.nn.init as init
 import torch.nn.functional as F
 
+class Scale(nn.Module):
+
+    def __init__(self, init_value=1e-3):
+        super().__init__()
+        self.scale = nn.Parameter(torch.FloatTensor([init_value]))
+
+    def forward(self, input):
+        return input * self.scale
+      
 class MeanShift(nn.Module):
     def __init__(self, mean_rgb, sub):
         super(MeanShift, self).__init__()
@@ -42,15 +51,20 @@ class BasicBlock(nn.Module):
 
 
 class ResidualBlock(nn.Module):
-    def __init__(self, in_channels, out_channels):
+    def __init__(self, in_channels, out_channels,wn=None):
         super().__init__()
+        self.res_scale = Scale(1)
+        self.x_scale = Scale(1)
+        self.conv1 = wn(nn.Conv2d(in_channels, out_channels, 3, 1, 1))
+        self.conv2 = wn(nn.Conv2d(in_channels, out_channels, 3, 1, 1))
+        body = []
+        body.append(self.conv1)
+        body.append(nn.ReLU(True))
+        body.append(self.conv2)
 
-        self.conv1 = nn.Conv2d(in_channels, out_channels, 3, 1, 1)
-        self.conv2 = nn.Conv2d(in_channels, out_channels, 3, 1, 1)
-
+        self.body = nn.Sequential(*body)
     def forward(self, x):
-        out = F.relu(self.conv1(x), inplace=True)
-        out = F.relu(self.conv2(out)+x, inplace=True)
+        out = self.res_scale(self.body(x)) + self.x_scale(x)
         return out
 
 
@@ -125,4 +139,22 @@ class _UpsampleBlock(nn.Module):
         out = x
         for layer in self.body:
             out = layer(out)
+        return out
+      
+class EInvertedBlock(nn.Module):
+    def __init__(self,
+                 in_channels, out_channels):
+        super(EInvertedBlock, self).__init__()
+
+        self.body = nn.Sequential(
+            nn.Conv2d(in_channels, out_channels, 3, 1, 1),
+            nn.ReLU(inplace=True),
+            nn.Conv2d(out_channels, out_channels, 3, 1, 1),
+            nn.ReLU(inplace=True),
+            nn.Conv2d(out_channels, out_channels, 3, 1, 1),
+        )
+
+    def forward(self, x):
+        out = self.body(x)
+        out = F.relu(out + x)
         return out

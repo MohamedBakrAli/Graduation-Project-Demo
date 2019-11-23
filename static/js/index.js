@@ -49,7 +49,6 @@ function smoothingFactor_disaply() {
             
     } else {
         $('.smoothingFactor').prop('disabled', true);
-
     }
 }
 

@@ -62,7 +62,7 @@ def result ():
         if (smoothing_factor == 'Auto'):
             smoothing_factor = estimate_noise(output_path)
         else:
-            smoothing_factor = float(smoothing_factor)
+            smoothing_factor = int(smoothing_factor)
 
         test_ffdnet (output_path, output_path, cuda, smoothing_factor)
         
@@ -72,12 +72,11 @@ def result ():
         if (smoothing_factor == 'Auto'):
             smoothing_factor = estimate_noise(input_path)
         else:
-            smoothing_factor = float(smoothing_factor)
+            smoothing_factor = int(smoothing_factor)
 
         test_ffdnet (input_path, output_path, cuda, smoothing_factor)
             
-
-    return render_template("result.html", input = "in_" + user_adr + filename, output = "out_"+ current_time + user_adr + filename)
+    return render_template("result.html", input = "in_" + user_adr + filename, output = "out_"+ user_adr + filename)
 
 
 

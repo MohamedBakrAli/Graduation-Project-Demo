@@ -6,7 +6,7 @@ A single Image super-resolution model aims to significantly increase the purity 
 An image denoising model is used to further remove noise from the outcome of the generic super resolution model , giving an altogether more polished look and better purity to the output image .
 
 ## demo vedio:
-- ![demo vedio](demo/demo_video.mkv).
+- [demo vedio](demo/demo_video.mkv).
 
 ## Authors
 * Ahmed Reda Amin
